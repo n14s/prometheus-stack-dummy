@@ -6,7 +6,7 @@ networks:
 services:
   prometheus:
     image: n14s/prometheus:1.0.0
-    container_name: prometheus
+    container_name: prometheuss
     volumes:
       - ./config/prometheus:/etc/prometheus/config/prometheus
     command:
@@ -26,7 +26,7 @@ services:
 
   node-exporter:
     image: prom/node-exporter:latest
-    container_name: node-exporter
+    container_name: node-exporterr
     user: root
     privileged: true
     volumes:
@@ -49,7 +49,7 @@ services:
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.44.0
-    container_name: cadvisor
+    container_name: cadvisorr
     ports:
       - 8080:8080
     restart: unless-stopped
@@ -63,32 +63,6 @@ services:
       monitor-net:
         aliases:
           - "cadvis"
-
-  aas-server:
-    image: eclipsebasyx/aas-server:1.0.1
-    volumes:
-      - ./config/aas-server:/usr/share/config
-    restart: unless-stopped
-    ports:
-      - 8081:4001
-    networks:
-      monitor-net:
-        aliases:
-          - "aas-serv"
-
-  prometheus-aas-router:
-    image: n14s/prometheus-aas-router:1.0.0
-    depends_on:
-      - aas-server
-      - prometheus
-      - node-exporter
-    volumes:
-      - ./config/prometheus-aas-router:/app/config
-    restart: unless-stopped
-    networks:
-      monitor-net:
-        aliases:
-          - "router"
 
 volumes:
   prometheus-data:
